@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de Boda</title>
+    <style>
+        body {
+            background-color: #f2f8f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 80vw;
+            max-width: 400px;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        .sobre-cerrado, .sobre-abierto, .invitacion {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            transition: transform 1s, opacity 1s;
+        }
+        .sobre-abierto, .invitacion, .tarjeta {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .sobre-cerrado.oculto {
+            display: none;
+        }
+        .sobre-abierto.mostrar {
+            opacity: 1;
+            visibility: visible;
+        }
+        .invitacion.mostrar {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-20px) scale(1.1);
+        }
+        .tarjeta {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            max-width: 300px;
+            aspect-ratio: 3 / 2;
+            transform: translate(-50%, -50%) scale(0);
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.5s ease-in-out, opacity 0.5s, visibility 0.5s;
+            z-index: 2;
+        }
+        .tarjeta.mostrar {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+        .tarjeta-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .tarjeta.volteada .tarjeta-inner {
+            transform: rotateY(180deg);
+        }
+        .tarjeta-frente, .tarjeta-detras {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            object-fit: contain;
+        }
+        .tarjeta-detras {
+            transform: rotateY(180deg);
+        }
+        .zoom {
+            transform: scale(2);
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 90vw;
+            }
+            .tarjeta {
+                width: 70vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" onclick="abrirSobre()">
+        <img src="sobre-cerrado.png" class="sobre-cerrado" id="sobreCerrado">
+        <img src="sobre-abierto.png" class="sobre-abierto" id="sobreAbierto">
+        <img src="invitacion.png" class="invitacion" id="invitacion" onclick="mostrarTarjeta(event)">
+    </div>
+    <div class="tarjeta" id="tarjeta" onclick="voltearOTaparTarjeta()">
+        <div class="tarjeta-inner">
+            <img src="mapa.png" class="tarjeta-frente">
+            <img src="linea-tiempo.png" class="tarjeta-detras">
+        </div>
+    </div>
+    <script>
+        function abrirSobre() {
+            let sobreCerrado = document.getElementById("sobreCerrado");
+            let sobreAbierto = document.getElementById("sobreAbierto");
+            let invitacion = document.getElementById("invitacion");
+            
+            sobreCerrado.classList.add("oculto");
+            setTimeout(() => {
+                sobreAbierto.classList.add("mostrar");
+                setTimeout(() => {
+                    invitacion.classList.add("mostrar");
+                }, 1000);
+            }, 500);
+        }
+        function mostrarTarjeta(event) {
+            event.stopPropagation();
+            document.getElementById("tarjeta").classList.add("mostrar");
+        }
+        function voltearOTaparTarjeta() {
+            let tarjeta = document.getElementById("tarjeta");
+            let tarjetaInner = document.querySelector(".tarjeta-inner");
+            
+            if (tarjeta.classList.contains("volteada")) {
+                tarjeta.classList.remove("volteada");
+                setTimeout(() => {
+                    tarjeta.classList.remove("mostrar");
+                }, 600);
+            } else {
+                tarjeta.classList.add("volteada");
+            }
+        }
+    </script>
+</body>
+</html>
